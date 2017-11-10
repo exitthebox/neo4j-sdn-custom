@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import school.domain.StudyBuddy;
+import school.domain.SubjectResult;
 import school.repository.StudyBuddyRepository;
 
+import java.util.Collection;
 import java.util.Map;
 
 
@@ -67,5 +70,11 @@ public class StudyBuddyController {
 	@RequestMapping("/popular")
 	public Iterable<Map<String, Object>> popularStudyBuddies() {
 		return studyBuddyRepository.getStudyBuddiesByPopularity();
+	}
+	
+	
+	@RequestMapping(value = "/subject/{subject}", method = RequestMethod.GET)
+	public Iterable<Map<SubjectResult, Object>> subject(@PathVariable String subject){
+		return studyBuddyRepository.getSubjectTaughtBy(subject);
 	}
 }

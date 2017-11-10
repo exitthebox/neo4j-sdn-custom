@@ -12,12 +12,20 @@ package school.repository;
 
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.repository.CrudRepository;
-import school.domain.StudyBuddy;
 
+import school.domain.StudyBuddy;
+import school.domain.SubjectResult;
+
+import java.util.Collection;
 import java.util.Map;
 
 public interface StudyBuddyRepository extends CrudRepository<StudyBuddy, Long> {
 
 	@Query("MATCH(s:StudyBuddy)<-[:BUDDY]-(p:Student) RETURN p, count(s) AS buddies ORDER BY buddies DESC")
 	Iterable<Map<String, Object>> getStudyBuddiesByPopularity();
+	
+	@Query("MATCH (s:Subject {name:{0}})-[r:TAUGHT_BY]->(t:Teacher) RETURN s, collect(r) as taught_by, collect (t) as teacher")
+	Iterable<Map<SubjectResult, Object>> getSubjectTaughtBy(String subject);
+	
+	
 }
